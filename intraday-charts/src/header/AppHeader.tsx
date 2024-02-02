@@ -1,15 +1,21 @@
 import './AppHeader.css'
-import StockExchangeInput from "./StockExchangeInput";
-import TickerInput from "./TickerInput";
-import DateInput from "./DateInput";
-import ExecuteButton from "./ExecuteButton";
+import DateInput, {DateInputData} from "./date/DateInput";
+import ExecuteButton from "./button/ExecuteButton";
+import React from "react";
+import AutocompleteInput, {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 
-function AppHeader() {
+export interface AppHeaderProps{
+    stockExchangeInput: AutocompleteInputData,
+    tickerInput: AutocompleteInputData,
+    dateCallbackFn: DateInputData
+}
+
+const AppHeader = (props: AppHeaderProps) => {
     return (
         <div className="AppHeader">
-            <StockExchangeInput/>
-            <TickerInput/>
-            <DateInput/>
+            <AutocompleteInput {...props.stockExchangeInput}/>
+            <AutocompleteInput {...props.tickerInput}/>
+            <DateInput {...props.dateCallbackFn}/>
             <ExecuteButton/>
         </div>
     )
