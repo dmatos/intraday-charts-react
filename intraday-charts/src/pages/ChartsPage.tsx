@@ -1,6 +1,7 @@
 import {LayouBaseChartsPage} from "../shared/layouts/LayoutBaseChartsPage";
 import AppHeaderContainer from "../shared/header/AppHeaderContainer";
 import {Box, useTheme} from "@mui/material";
+import {ReactNode} from "react";
 
 const PlaceholderComponent = () => {
     const theme = useTheme();
@@ -9,9 +10,10 @@ const PlaceholderComponent = () => {
         </Box>
     )
 }
-export const ChartsPage:React.FC = ()=>{
+export const ChartsPage:React.FC<{children:ReactNode}> = ({children})=>{
     return (
-        <LayouBaseChartsPage header={AppHeaderContainer()} main={PlaceholderComponent()} footer={PlaceholderComponent()}>
+        <LayouBaseChartsPage  header={AppHeaderContainer()} main={PlaceholderComponent()} footer={PlaceholderComponent()}>
+            {children}
         </LayouBaseChartsPage>
     )
 }
