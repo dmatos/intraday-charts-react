@@ -1,21 +1,16 @@
 import React from 'react';
-import './App.css';
-import {AppProvider} from "./AppContext";
-import AppHeaderContainer from "./header/AppHeaderContainer";
+import {AppProvider} from "./shared/context/AppContext";
+import {ChartsPage} from "./pages/ChartsPage";
+import {ThemeProvider} from "@mui/material";
+import {DarkTheme} from "./shared/themes";
 
 const App:React.FC = () => {
     return (
-        <div className="App">
-            <header>
+            <ThemeProvider theme={DarkTheme}>
                 <AppProvider>
-                    <AppHeaderContainer/>
+                    <ChartsPage/>
                 </AppProvider>
-            </header>
-            <main>
-                <h1>AppMain</h1>
-            </main>
-        </div>
+            </ThemeProvider>
     );
 }
-
 export default App;

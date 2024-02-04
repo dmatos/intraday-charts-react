@@ -1,5 +1,5 @@
 import AppHeader, {AppHeaderProps} from "./AppHeader";
-import {useAppDispatch} from "../AppContext";
+import {useAppDispatch} from "../context/AppContext";
 import {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 import {DateInputData} from "./date/DateInput";
 import {useEffect, useState} from "react";
@@ -64,7 +64,7 @@ export default function AppHeaderContainer(){
     let stockExchangeInput:AutocompleteInputData = {
         options: Array.from(stockExchange2TickersMap.keys()),
         onChange: onSelectStockExchange,
-        label: "Stock exchange",
+        label: "Exchange",
         id: "combo-box-stock-exchange"
     }
 
@@ -86,8 +86,6 @@ export default function AppHeaderContainer(){
     }
 
     return (
-        <div className={"AppHeaderContainer"}>
-            <AppHeader {...appHeaderProps} />
-        </div>
+        <AppHeader {...appHeaderProps} />
     )
 }

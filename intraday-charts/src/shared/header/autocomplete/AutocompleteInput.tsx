@@ -9,14 +9,13 @@ export interface AutocompleteInputData{
 }
 const AutocompleteInput  = ({onChange, options, label, id}:AutocompleteInputData) =>{
     return (
-        <div className={"AutocompleteInput"}>
             <Autocomplete
                 onChange={(event, newValue) => onChange(newValue)}
                 id={id}
                 options={options}
-                renderInput={(params) => <TextField {...params} label={label}/>}
+                renderInput={(params) =>
+                    <TextField variant="filled" {...params} label={label}/>}
             />
-        </div>
     )
 }
 export default AutocompleteInput;

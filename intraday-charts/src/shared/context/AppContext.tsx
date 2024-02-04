@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useReducer} from "react";
-import {AppAction, AppState} from "./model/App.model";
+import {AppAction, AppState} from "../model/App.model";
 
 const initialState: AppState = {
     selectedStockExchange: "",
