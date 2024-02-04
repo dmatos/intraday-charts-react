@@ -11,6 +11,7 @@ const AutocompleteInput  = ({onChange, options, label, id}:AutocompleteInputData
     return (
             <Autocomplete
                 onChange={(event, newValue) => onChange(newValue)}
+                disablePortal={true}
                 id={id}
                 options={options}
                 renderInput={(params) =>
