@@ -1,5 +1,11 @@
 import AppHeader, {AppHeaderProps} from "./AppHeader";
-import {useAppDispatch} from "../context/AppContext";
+import {
+    setEndDate,
+    setSelectedStockExchange,
+    setSelectedTicker,
+    setStartDate,
+    useAppDispatch
+} from "../context/AppContext";
 import {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 import {DateInputData} from "./date/DateInput";
 import {useEffect, useState} from "react";
@@ -28,12 +34,14 @@ export default function AppHeaderContainer(){
             .catch(error => console.error(error));
     }, [])
 
-    function setDate(year:string, month:string, day:string):void{
-        let formattedDate = [year,month.padStart(2,"0"),day.padStart(2,"0")].join("-");
-        dispatch({
-            type: "setSelectedDate",
-            payload: formattedDate
-        })
+    const setDateAndFormat = (type:string) => {
+        return (year:string, month:string, day:string): void => {
+            let formattedDate = [year,month.padStart(2,"0"),day.padStart(2,"0")].join("-");
+            dispatch({
+                type: type,
+                payload: formattedDate
+            });
+        }
     }
 
     function onSelectStockExchange(stockExchangeCode:string|null){
@@ -46,7 +54,7 @@ export default function AppHeaderContainer(){
             return;
         }
         dispatch({
-            type: "setSelectedStockExchange",
+            type: setSelectedStockExchange,
             payload: stockExchangeCode
         });
         setFilteredTickers(tickers);
@@ -55,7 +63,7 @@ export default function AppHeaderContainer(){
     function onSelectTicker(selectedValue: string|null){
         if(!!selectedValue && selectedValue.length > 0){
             dispatch({
-                type: "setSelectedTicker",
+                type: setSelectedTicker,
                 payload: selectedValue
             });
         }
@@ -75,14 +83,19 @@ export default function AppHeaderContainer(){
         id: "combo-box-ticker"
     }
 
-    let dateCallbackFn:DateInputData = {
-        onChangeFn: setDate
+    let startDateCallbackFn:DateInputData = {
+        onChangeFn: setDateAndFormat(setStartDate)
+    }
+
+    let endDateCallbackFn:DateInputData = {
+        onChangeFn: setDateAndFormat(setEndDate)
     }
 
     let appHeaderProps:AppHeaderProps = {
         stockExchangeInput,
         tickerInput,
-        dateCallbackFn
+        startDateCallbackFn,
+        endDateCallbackFn
     }
 
     return (

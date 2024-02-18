@@ -1,11 +1,5 @@
 import React, {useEffect, useRef} from "react";
 import {Box} from "@mui/material";
-import {ISeriesApi} from "lightweight-charts";
-
-export interface ChartCardProps{
-    elementId: string,
-    series: ISeriesApi<any>,
-}
 
 export interface AppMainProps{
     callbackFn: (ref:HTMLElement|null) => void,
@@ -32,7 +26,7 @@ export const AppMain:React.FC<AppMainProps> = (appMainProps:AppMainProps) => {
         <Box id={"chartBox"}
              display={"grid"}
              ref ={boxRef}
-             height={appMainProps.height}
+             height={'90vh'}
              width={appMainProps.width}
         >
         </Box>

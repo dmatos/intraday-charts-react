@@ -1,31 +1,43 @@
 import React, {createContext, useContext, useReducer} from "react";
 import {AppAction, AppState} from "../model/App.model";
 
+export const setSelectedStockExchange = "setSelectedStockExchange";
+export const setSelectedTicker = "setSelectedTicker";
+export const setStartDate = "setStartDate";
+export const setEndDate = "setEndDate";
+
 const initialState: AppState = {
     selectedStockExchange: "",
     selectedTicker: "",
-    selectedDate: new Date().toISOString()
+    startDate: new Date().toISOString(),
+    endDate: new Date().toISOString()
 }
 
 function appReducer(state: AppState, action: AppAction): AppState{
     console.log(action)
     switch (action.type){
-        case "setSelectedStockExchange":{
+        case setSelectedStockExchange:{
             return {
                 ...state,
                 selectedStockExchange:  action.payload
             };
         }
-        case "setSelectedTicker":{
+        case setSelectedTicker:{
             return {
                 ...state,
                 selectedTicker:  action.payload
             };
         }
-        case "setSelectedDate":{
+        case setStartDate:{
             return {
                 ...state,
-                selectedDate: action.payload
+                startDate: action.payload
+            };
+        }
+        case setEndDate:{
+            return {
+                ...state,
+                endDate: action.payload
             };
         }
         default: {

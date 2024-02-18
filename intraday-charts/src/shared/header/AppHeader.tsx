@@ -7,7 +7,8 @@ import {Box, useTheme} from "@mui/material";
 export interface AppHeaderProps{
     stockExchangeInput: AutocompleteInputData,
     tickerInput: AutocompleteInputData,
-    dateCallbackFn: DateInputData
+    startDateCallbackFn: DateInputData,
+    endDateCallbackFn: DateInputData
 }
 
 const AppHeader = (props: AppHeaderProps) => {
@@ -16,8 +17,10 @@ const AppHeader = (props: AppHeaderProps) => {
         <Box
             display="grid"
             gap={"10px"}
-            height={'fit-content'}
-            gridTemplateColumns={"repeat(4,3fr)"}
+            height={'6vh'}
+            minHeight={'55px'}
+            padding={'10px'}
+            gridTemplateColumns={"repeat(5,2fr)"}
             alignSelf={"center"}
             justifyItems={"stretch"}
             alignContent={"center"}
@@ -30,7 +33,10 @@ const AppHeader = (props: AppHeaderProps) => {
                 <AutocompleteInput {...props.tickerInput}/>
             </Box>
             <Box display="grid" bgcolor={theme.palette.background.paper}>
-                <DateInput {...props.dateCallbackFn}/>
+                <DateInput {...props.startDateCallbackFn}/>
+            </Box>
+            <Box display="grid" bgcolor={theme.palette.background.paper}>
+                <DateInput {...props.endDateCallbackFn}/>
             </Box>
             <Box display="grid" bgcolor={theme.palette.background.default}>
                 <ExecuteButton/>

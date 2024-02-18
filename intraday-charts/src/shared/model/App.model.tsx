@@ -1,7 +1,8 @@
 export interface AppState {
     selectedStockExchange: string,
     selectedTicker: string,
-    selectedDate: string
+    startDate: string,
+    endDate: string
 }
 
 export interface AppAction {
