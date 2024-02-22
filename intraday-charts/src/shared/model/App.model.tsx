@@ -3,6 +3,7 @@ export interface AppState {
     selectedTicker: string,
     startDate: string,
     endDate: string
+    timeframe: number
 }
 
 export interface AppAction {

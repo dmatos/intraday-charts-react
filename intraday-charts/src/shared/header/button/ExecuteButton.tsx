@@ -1,8 +1,16 @@
 import {Button, Icon} from "@mui/material";
 
-function ExecuteButton(){
+export interface ExecuteButtonData {
+    callBackFn: () => void
+}
+
+function ExecuteButton(executeButtonData:ExecuteButtonData){
     return (
-        <Button variant="contained" color={"primary"}>
+        <Button
+            variant="contained"
+            color={"primary"}
+            onClick={executeButtonData.callBackFn}
+        >
             <link
                 rel="stylesheet"
                 href="https://fonts.googleapis.com/icon?family=Material+Icons"

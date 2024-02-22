@@ -5,12 +5,14 @@ export const setSelectedStockExchange = "setSelectedStockExchange";
 export const setSelectedTicker = "setSelectedTicker";
 export const setStartDate = "setStartDate";
 export const setEndDate = "setEndDate";
+export const setTimeframe = "setTimeframe";
 
 const initialState: AppState = {
     selectedStockExchange: "",
     selectedTicker: "",
     startDate: new Date().toISOString(),
-    endDate: new Date().toISOString()
+    endDate: new Date().toISOString(),
+    timeframe: 5
 }
 
 function appReducer(state: AppState, action: AppAction): AppState{
@@ -39,6 +41,12 @@ function appReducer(state: AppState, action: AppAction): AppState{
                 ...state,
                 endDate: action.payload
             };
+        }
+        case setTimeframe:{
+            return {
+                ...state,
+                timeframe: isNaN(+action.payload)?5:+action.payload
+            }
         }
         default: {
             return {
