@@ -1,18 +1,29 @@
 import AppHeader, {AppHeaderProps} from "./AppHeader";
-import {useAppDispatch} from "../context/AppContext";
+import {
+    AppContext,
+    setEndDate,
+    setSelectedStockExchange,
+    setSelectedTicker,
+    setStartDate,
+    setTimeframe
+} from "../context/AppContext";
 import {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 import {DateInputData} from "./date/DateInput";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {Ticker} from "../model/Ticker.model";
+import {IFetchDataService} from "../services/IFetchData.service";
+import {NotificationContext, showErrorMessage} from "../context/NotificationContext";
+import {IResponseHandlerService} from "../services/response/handler/IResponseHandler.service";
 
-export default function AppHeaderContainer(){
+export default function AppHeaderContainer(service: Readonly<IFetchDataService>, responseHandlerService: Readonly<IResponseHandlerService>){
 
     const[stockExchange2TickersMap, setStockExchange2TickersMap] = useState<Map<string, string[]>>(new Map());
     const[filteredTickers, setFilteredTickers] = useState<string[]>([]);
-    const dispatch = useAppDispatch();
+    const {appState, appDispatch} = useContext(AppContext);
+    const notificationContext = useContext(NotificationContext);
 
     useEffect(()=>{
-        fetch("http://localhost:8080/intraday/tickers/search/_")
+        fetch(process.env.REACT_APP_INTRADAY_API_URL+"/intraday/tickers/search/_")
             .then(response => response.json())
             .then((data:Ticker[]) => {
                 let se2t = new Map<string, string[]>();
@@ -25,15 +36,24 @@ export default function AppHeaderContainer(){
                     setStockExchange2TickersMap(se2t);
                 })
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                notificationContext.notificationDispatch( {
+                    type: showErrorMessage,
+                    payload: error.status
+                })
+            });
     }, [])
 
-    function setDate(year:string, month:string, day:string):void{
-        let formattedDate = [year,month.padStart(2,"0"),day.padStart(2,"0")].join("-");
-        dispatch({
-            type: "setSelectedDate",
-            payload: formattedDate
-        })
+    const setFormattedDate = (type:string, hms: string) => {
+        return (year:string, month:string, day:string): void => {
+            let formattedDate = [year,month.padStart(2,"0"),day.padStart(2,"0")].join("-");
+            formattedDate = formattedDate + 'T' + hms;
+            appDispatch({
+                type: type,
+                payload: formattedDate
+            });
+        }
     }
 
     function onSelectStockExchange(stockExchangeCode:string|null){
@@ -45,8 +65,8 @@ export default function AppHeaderContainer(){
             setFilteredTickers([]);
             return;
         }
-        dispatch({
-            type: "setSelectedStockExchange",
+        appDispatch({
+            type: setSelectedStockExchange,
             payload: stockExchangeCode
         });
         setFilteredTickers(tickers);
@@ -54,11 +74,30 @@ export default function AppHeaderContainer(){
 
     function onSelectTicker(selectedValue: string|null){
         if(!!selectedValue && selectedValue.length > 0){
-            dispatch({
-                type: "setSelectedTicker",
+            appDispatch({
+                type: setSelectedTicker,
                 payload: selectedValue
             });
         }
+    }
+
+    function onSelectTimeframe(selectedValue: string|null){
+        if(!!selectedValue && !isNaN(+selectedValue)){
+            appDispatch({
+                type: setTimeframe,
+                payload: selectedValue
+            });
+        }
+    }
+
+    function onExecute(){
+        responseHandlerService.handleResponse(service.fetchData(
+            appState.selectedStockExchange,
+            appState.selectedTicker,
+            appState.startDate,
+            appState.endDate,
+            appState.timeframe
+        ));
     }
 
     let stockExchangeInput:AutocompleteInputData = {
@@ -75,14 +114,24 @@ export default function AppHeaderContainer(){
         id: "combo-box-ticker"
     }
 
-    let dateCallbackFn:DateInputData = {
-        onChangeFn: setDate
+    let startDateCallbackFn:DateInputData = {
+        onChangeFn: setFormattedDate(setStartDate, '00:00:00')
+    }
+
+    let endDateCallbackFn:DateInputData = {
+        onChangeFn: setFormattedDate(setEndDate, '23:59:59')
+    }
+
+    let executeButtonCallbackFn = {
+        callBackFn: onExecute
     }
 
     let appHeaderProps:AppHeaderProps = {
         stockExchangeInput,
         tickerInput,
-        dateCallbackFn
+        startDateCallbackFn,
+        endDateCallbackFn,
+        renderChartsCallbackFn: executeButtonCallbackFn
     }
 
     return (

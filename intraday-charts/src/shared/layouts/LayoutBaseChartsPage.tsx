@@ -17,9 +17,15 @@ export const LayouBaseChartsPage:React.FC<ILayouBaseChartsPageProps> = ({header,
             height={"100vh"}
             overflow={"hidden"}
             bgcolor={theme.palette.background.default}>
-            {header}
-            {main}
-            {footer}
+            <Box display={"grid"}>
+                {header}
+            </Box>
+            <Box display={"grid"} height={"fit-content"}>
+                {main}
+            </Box>
+            <Box display={"grid"} height={"fit-content"}>
+                {footer}
+            </Box>
         </Box>
     )
 };
