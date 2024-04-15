@@ -6,7 +6,7 @@ export interface DateInputData{
     onChangeFn: (year:string, month:string, day:string)=>void
 }
 
-function DateInput({onChangeFn}:DateInputData){
+function DateInput({onChangeFn}: Readonly<DateInputData>){
     const isWeekend = (date: Dayjs) => {
         const day = date.day();
         return day === 0 || day === 6;

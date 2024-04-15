@@ -1,10 +1,10 @@
 import {Button, Icon} from "@mui/material";
 
-export interface ExecuteButtonData {
+export interface RenderChartsButtonData {
     callBackFn: () => void
 }
 
-function ExecuteButton(executeButtonData:ExecuteButtonData){
+function RenderChartsButton(executeButtonData: Readonly<RenderChartsButtonData>){
     return (
         <Button
             variant="contained"
@@ -20,4 +20,4 @@ function ExecuteButton(executeButtonData:ExecuteButtonData){
     )
 }
 
-export default ExecuteButton;
+export default RenderChartsButton;

@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useReducer} from "react";
+import React, {createContext, useReducer} from "react";
 import {AppAction, AppState} from "../model/App.model";
 
 export const setSelectedStockExchange = "setSelectedStockExchange";
@@ -6,6 +6,7 @@ export const setSelectedTicker = "setSelectedTicker";
 export const setStartDate = "setStartDate";
 export const setEndDate = "setEndDate";
 export const setTimeframe = "setTimeframe";
+
 
 const initialState: AppState = {
     selectedStockExchange: "",
@@ -16,7 +17,7 @@ const initialState: AppState = {
 }
 
 function appReducer(state: AppState, action: AppAction): AppState{
-    console.log(action)
+    console.debug(action);
     switch (action.type){
         case setSelectedStockExchange:{
             return {
@@ -56,27 +57,21 @@ function appReducer(state: AppState, action: AppAction): AppState{
     }
 }
 
-const AppContext = createContext(initialState);
-const AppDispatchContext = createContext((action: AppAction)=>{useReducer(appReducer, initialState, ()=>initialState)});
+interface IAppContext{
+    appState: AppState,
+    appDispatch: React.Dispatch<AppAction>
+}
+
+export const AppContext = createContext({} as IAppContext);
 
 const AppProvider = ({children}:{children:React.ReactNode}) => {
-    const [state, dispatch] = useReducer(appReducer, initialState, ()=>initialState);
+    const [appState, appDispatch] = useReducer(appReducer, initialState);
+
     return (
-        <AppContext.Provider value={state}>
-            <AppDispatchContext.Provider value={dispatch}>
-                {children}
-            </AppDispatchContext.Provider>
+        <AppContext.Provider value={{appState: appState, appDispatch: appDispatch}}>
+            {children}
         </AppContext.Provider>
     )
 }
-
-export function useApp(){
-    return useContext(AppContext);
-}
-
-export function useAppDispatch(){
-    return useContext(AppDispatchContext)
-}
-
 
 export {AppProvider}

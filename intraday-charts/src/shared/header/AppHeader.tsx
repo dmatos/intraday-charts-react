@@ -1,5 +1,5 @@
 import DateInput, {DateInputData} from "./date/DateInput";
-import ExecuteButton, {ExecuteButtonData} from "./button/ExecuteButton";
+import RenderChartsButton, {RenderChartsButtonData} from "./button/RenderChartsButton";
 import React from "react";
 import AutocompleteInput, {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 import {Box, useTheme} from "@mui/material";
@@ -9,7 +9,7 @@ export interface AppHeaderProps{
     tickerInput: AutocompleteInputData,
     startDateCallbackFn: DateInputData,
     endDateCallbackFn: DateInputData
-    executeButtonCallbackFn: ExecuteButtonData
+    renderChartsCallbackFn: RenderChartsButtonData
 }
 
 const AppHeader = (props: AppHeaderProps) => {
@@ -40,7 +40,7 @@ const AppHeader = (props: AppHeaderProps) => {
                 <DateInput {...props.endDateCallbackFn}/>
             </Box>
             <Box display="grid" bgcolor={theme.palette.background.default}>
-                <ExecuteButton {...props.executeButtonCallbackFn}/>
+                <RenderChartsButton {...props.renderChartsCallbackFn}/>
             </Box>
         </Box>
     )
