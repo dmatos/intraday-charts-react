@@ -43,7 +43,7 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
                     payload: error.status
                 })
             });
-    }, [])
+    }, [notificationContext])
 
     const setFormattedDate = (type:string, hms: string) => {
         return (year:string, month:string, day:string): void => {
@@ -81,7 +81,7 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
         }
     }
 
-    function onSelectTimeframe(selectedValue: string|null){
+    function onSelectTimeframe(selectedValue: string|undefined){
         if(!!selectedValue && !isNaN(+selectedValue)){
             appDispatch({
                 type: setTimeframe,
@@ -118,20 +118,29 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
         onChangeFn: setFormattedDate(setStartDate, '00:00:00')
     }
 
-    let endDateCallbackFn:DateInputData = {
+    const endDateCallbackFn:DateInputData = {
         onChangeFn: setFormattedDate(setEndDate, '23:59:59')
     }
 
-    let executeButtonCallbackFn = {
-        callBackFn: onExecute
+    const executeButtonCallbackFn = {
+        callbackFn: onExecute
     }
+
+    const insertIndicator = {
+        callbackFn: () => {
+            //TODO call modal with a list of indicators
+        }
+    }
+
 
     let appHeaderProps:AppHeaderProps = {
         stockExchangeInput,
         tickerInput,
         startDateCallbackFn,
         endDateCallbackFn,
-        renderChartsCallbackFn: executeButtonCallbackFn
+        renderChartsCallbackFn: executeButtonCallbackFn,
+        timeframeCallbackFn: {onChangeCallback: onSelectTimeframe},
+        insertIndicator: insertIndicator
     }
 
     return (

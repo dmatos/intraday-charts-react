@@ -1,17 +1,17 @@
-import {Button} from "@mui/material";
-import {TrendingUp} from "@mui/icons-material";
 import {IButtonCallbackFn} from "./IButtonCallbackFn";
+import {Button} from "@mui/material";
+import {LibraryAdd} from "@mui/icons-material";
 
-function RenderChartsButton(executeButtonData: Readonly<IButtonCallbackFn>){
+function InsertIndicatorButton(executeButtonData: Readonly<IButtonCallbackFn>) {
     return (
         <Button
             variant="contained"
             color={"primary"}
             onClick={executeButtonData.callbackFn}
         >
-            <TrendingUp/>
+            <LibraryAdd/>
         </Button>
     )
 }
 
-export default RenderChartsButton;
+export default InsertIndicatorButton;
