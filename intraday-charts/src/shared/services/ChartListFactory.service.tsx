@@ -24,8 +24,11 @@ export class ChartListFactoryService implements IChartListFactory{
             mainChart.auxIndicators = [...mainChart.auxIndicators, ...mainIndicators.slice(1)];
         }
         listIndicators.forEach(
-            (item, index) =>
-                chartList.push(this.getChart(item, `${item.type}${index}`, ticker))
+            (item, index) => {
+                if(item.data?.length > 0){
+                    chartList.push(this.getChart(item, `${item.type}${index}`, ticker))
+                }
+            }
         );
         return {
             mainChart,
@@ -44,7 +47,6 @@ export class ChartListFactoryService implements IChartListFactory{
             id: id,
             indicator:indicator,
             auxIndicators: [] as IndicatorData[],
-            config: {configs: new Map<string, string[]>()},
             chartBoxProps: this.getChartBoxConfigs(id, indicator?.type),
             title: `${ticker} ${indicator?.type}`
         };
@@ -54,10 +56,7 @@ export class ChartListFactoryService implements IChartListFactory{
         let height: number;
         switch (type){
             case IndicatorType.Candlestick:
-                height =  window.innerHeight * 40 / 100;
-                break;
-            case IndicatorType.Histogram:
-                height =  window.innerHeight * 10 / 100;
+                height =  window.innerHeight * 50 / 100;
                 break;
             case IndicatorType.MACD:
             case IndicatorType.RSI:
@@ -74,9 +73,6 @@ export class ChartListFactoryService implements IChartListFactory{
     }
 
     isMainComplaint = (type: IndicatorType) =>{
-        switch (type){
-            case(IndicatorType.Candlestick): return true;
-            default: return false;
-        }
+        return type === IndicatorType.Candlestick;
     }
 }

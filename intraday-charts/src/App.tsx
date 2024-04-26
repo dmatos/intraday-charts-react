@@ -5,7 +5,7 @@ import {ThemeProvider} from "@mui/material";
 import {DarkTheme} from "./shared/themes";
 import {NotificationProvider} from "./shared/context/NotificationContext";
 import {IndicatorProvider} from "./shared/context/IndicatorContext";
-import {ChartConfigProvider} from "./shared/context/ChartConfigContext";
+import {ConfigProvider} from './shared/context/ConfigContext';
 
 const App:React.FC = () => {
     let children = undefined;
@@ -14,11 +14,11 @@ const App:React.FC = () => {
             <AppProvider>
                 <NotificationProvider>
                     <IndicatorProvider>
-                        <ChartConfigProvider>
-                            <ChartsPage>
-                                {children}
-                            </ChartsPage>
-                        </ChartConfigProvider>
+                        <ConfigProvider>
+                                <ChartsPage>
+                                    {children}
+                                </ChartsPage>
+                        </ConfigProvider>
                     </IndicatorProvider>
                 </NotificationProvider>
             </AppProvider>

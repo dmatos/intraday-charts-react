@@ -9,20 +9,23 @@ import {
 } from "../context/AppContext";
 import {AutocompleteInputData} from "./autocomplete/AutocompleteInput";
 import {DateInputData} from "./date/DateInput";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useMemo, useState} from "react";
 import {Ticker} from "../model/Ticker.model";
-import {IFetchDataService} from "../services/IFetchData.service";
 import {NotificationContext, showErrorMessage} from "../context/NotificationContext";
-import {IResponseHandlerService} from "../services/response/handler/IResponseHandler.service";
+import {IndicatorType} from "../model/IndicatorType.enum";
+import {IndicatorContext, pushIndicator} from "../context/IndicatorContext";
+import {IAddIndicatorCallbackFn} from "./button/IAddIndicatorCallbackFn";
+import {IButtonCallbackFn} from "./button/IButtonCallbackFn";
 
-export default function AppHeaderContainer(service: Readonly<IFetchDataService>, responseHandlerService: Readonly<IResponseHandlerService>){
+export default function AppHeaderContainer(){
 
     const[stockExchange2TickersMap, setStockExchange2TickersMap] = useState<Map<string, string[]>>(new Map());
     const[filteredTickers, setFilteredTickers] = useState<string[]>([]);
-    const {appState, appDispatch} = useContext(AppContext);
-    const notificationContext = useContext(NotificationContext);
+    const { appDispatch} = useContext(AppContext);
+    const {notificationDispatch} = useContext(NotificationContext);
+    const {indicatorState,indicatorDispatch} = useContext(IndicatorContext);
 
-    useEffect(()=>{
+    useMemo(()=>{
         fetch(process.env.REACT_APP_INTRADAY_API_URL+"/intraday/tickers/search/_")
             .then(response => response.json())
             .then((data:Ticker[]) => {
@@ -38,12 +41,11 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
             })
             .catch(error => {
                 console.error(error);
-                notificationContext.notificationDispatch( {
+                notificationDispatch({
                     type: showErrorMessage,
                     payload: error.status
                 })
-            });
-    }, [notificationContext])
+            })}, []);
 
     const setFormattedDate = (type:string, hms: string) => {
         return (year:string, month:string, day:string): void => {
@@ -90,16 +92,6 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
         }
     }
 
-    function onExecute(){
-        responseHandlerService.handleResponse(service.fetchData(
-            appState.selectedStockExchange,
-            appState.selectedTicker,
-            appState.startDate,
-            appState.endDate,
-            appState.timeframe
-        ));
-    }
-
     let stockExchangeInput:AutocompleteInputData = {
         options: Array.from(stockExchange2TickersMap.keys()),
         onChange: onSelectStockExchange,
@@ -122,13 +114,30 @@ export default function AppHeaderContainer(service: Readonly<IFetchDataService>,
         onChangeFn: setFormattedDate(setEndDate, '23:59:59')
     }
 
-    const executeButtonCallbackFn = {
-        callbackFn: onExecute
+    const executeButtonCallbackFn: IButtonCallbackFn = {
+        callbackFn: () =>{
+            indicatorDispatch({
+                type: pushIndicator,
+                payload: {
+                    type: indicatorState.mainChartType,
+                    data: []
+                }
+            })
+        }
     }
 
-    const insertIndicator = {
-        callbackFn: () => {
-            //TODO call modal with a list of indicators
+    const insertIndicator: IAddIndicatorCallbackFn = {
+        callbackFn: (type:string|null) => {
+            if(type) {
+                const indicatorType:IndicatorType = IndicatorType[type as keyof typeof IndicatorType];
+                indicatorDispatch({
+                    type: pushIndicator,
+                    payload: {
+                        type: indicatorType,
+                        data: []
+                    }
+                })
+            }
         }
     }
 

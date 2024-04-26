@@ -6,6 +6,7 @@ import {Box, useTheme} from "@mui/material";
 import TimeframeInput, {TimeframeProps} from "./number/TimeframeInput";
 import {IButtonCallbackFn} from "./button/IButtonCallbackFn";
 import InsertIndicatorButton from "./button/InsertIndicatorButton";
+import {IAddIndicatorCallbackFn} from "./button/IAddIndicatorCallbackFn";
 
 export interface AppHeaderProps{
     stockExchangeInput: AutocompleteInputData,
@@ -14,7 +15,7 @@ export interface AppHeaderProps{
     endDateCallbackFn: DateInputData
     renderChartsCallbackFn: IButtonCallbackFn,
     timeframeCallbackFn: TimeframeProps,
-    insertIndicator: IButtonCallbackFn
+    insertIndicator: IAddIndicatorCallbackFn
 }
 
 const AppHeader = (props: AppHeaderProps) => {

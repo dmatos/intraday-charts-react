@@ -1,18 +1,17 @@
 import {IndicatorType} from "../model/IndicatorType.enum";
 import {IndicatorData} from "../model/IndicatorData.model";
-import React, {createContext, useReducer} from "react";
+import React, {createContext, useMemo, useReducer} from "react";
 
-export const upsertMainIndicator = "upsertMainIndicator";
 export const pushIndicator = "pushIndicator";
 export const popIndicator = "popIndicator";
 
 export interface IndicatorProps {
-    indicators: IndicatorData[],
+    indicators: Set<IndicatorType>,
     mainChartType: IndicatorType
 }
 
 const indicatorProps: IndicatorProps = {
-    indicators: [],
+    indicators: new Set<IndicatorType>(),
     mainChartType: IndicatorType.Candlestick
 }
 
@@ -25,27 +24,12 @@ export interface IndicatorAction{
 function indicatorReducer(state: IndicatorProps, action: IndicatorAction) {
     console.debug(action);
     switch (action.type){
-        case upsertMainIndicator: {
-            state.indicators[0] = {
-                type: action.payload.type,
-                data: action.payload.data
-            };
-            return {
-                ...state,
-                mainChartType: action.payload.type
-            };
-        }
         case pushIndicator: {
-            state.indicators.push(
-                {
-                    type: action.payload.type,
-                    data: action.payload.data
-                }
-            );
+            state.indicators.add( action.payload.type);
             return {...state};
         }
         case popIndicator:{
-            state.indicators.pop();
+            state.indicators.delete(action.payload.type);
             return {...state};
         }
         default: {
@@ -63,8 +47,11 @@ export const IndicatorContext = createContext({} as IIndicatorContext);
 
 export const IndicatorProvider = ({children}:{children:React.ReactNode}) => {
     const [indicatorState, indicatorDispatch] = useReducer(indicatorReducer, indicatorProps);
+    const context = useMemo(()=>{
+        return {indicatorState, indicatorDispatch}
+    },[indicatorState,indicatorDispatch])
     return (
-        <IndicatorContext.Provider value = {{indicatorState: indicatorState, indicatorDispatch: indicatorDispatch}}>
+        <IndicatorContext.Provider value = {context}>
             {children}
         </IndicatorContext.Provider>
     )
