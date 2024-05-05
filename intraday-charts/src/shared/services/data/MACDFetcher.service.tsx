@@ -1,16 +1,11 @@
 import DataFetcherParams from "./DataFetcherParams";
 import {IFetchDataService} from "./IFetchData.service";
-import {CandlestickResponse} from "../../model/CandlestickResponse.model";
-
-export enum MACDConfigKeys {
-    FastSignalKey,
-    SlowSignalKey,
-    SignalKey,
-    SignalDelay
-}
+import Configs from "../../model/configs/Configs";
+import {MacdResponse} from "../../model/response/MacdResponse.model";
+import {MACDConfigKeys} from "../../model/configs/MacdConfigs.model";
 
 export class MACDFetcherService implements IFetchDataService {
-    fetchData = async (params: DataFetcherParams, configs: Map<string,string>) => {
+    fetchData = async (params: DataFetcherParams) => {
         return new Promise((resolve, reject) => {
             const requestOptions = {
                 method: 'POST',
@@ -20,10 +15,10 @@ export class MACDFetcherService implements IFetchDataService {
                     end: params.dateEnd,
                     chronoUnit: "MINUTES",
                     timeframe: params.timeframe,
-                    fastSignal: configs.get(MACDConfigKeys[MACDConfigKeys.FastSignalKey]),
-                    slowSignal: configs.get(MACDConfigKeys[MACDConfigKeys.SlowSignalKey]),
-                    signal: configs.get(MACDConfigKeys[MACDConfigKeys.SignalKey]),
-                    signalDelay: configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelay])
+                    fastSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.FastSignalKey])?.value,
+                    slowSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.SlowSignalKey])?.value,
+                    signal: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalKey])?.value,
+                    signalDelay: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelay])?.value
                 }),
                 headers: new Headers({
                     'Content-Type': 'application/json',
@@ -39,10 +34,8 @@ export class MACDFetcherService implements IFetchDataService {
                         return response.json();
                     }
                 })
-                .then((data: CandlestickResponse|null) => {
-                    if(data){
-                        resolve(data.candles);
-                    }
+                .then((data: MacdResponse|null) => {
+                    resolve(data);
                 })
                 .catch(
                     (error) => {

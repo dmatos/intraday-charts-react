@@ -25,7 +25,7 @@ export class ChartListFactoryService implements IChartListFactory{
         }
         listIndicators.forEach(
             (item, index) => {
-                if(item.data?.length > 0){
+                if(item.data){
                     chartList.push(this.getChart(item, `${item.type}${index}`, ticker))
                 }
             }

@@ -4,12 +4,12 @@ import DataFetcherParams from "./DataFetcherParams";
 import {MACDFetcherService} from "./MACDFetcher.service";
 
 export class DataFetcherService{
-    async execute(indicatorType: IndicatorType, params: DataFetcherParams, configs: Map<string,string>){
+    async execute(indicatorType: IndicatorType, params: DataFetcherParams){
         switch (indicatorType){
             case IndicatorType.Candlestick:
                 return new CandlestickService().fetchData(params);
             case IndicatorType.MACD:
-                return new MACDFetcherService().fetchData(params, configs);
+                return new MACDFetcherService().fetchData(params);
             default:
                 return async () => {console.debug("No data fetcher available.")};
         }

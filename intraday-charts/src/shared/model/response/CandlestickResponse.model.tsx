@@ -1,4 +1,4 @@
-import {Candle} from "./Candle.model";
+import {Candle} from "../Candle.model";
 
 export interface CandlestickResponse{
     tickerCode: string,

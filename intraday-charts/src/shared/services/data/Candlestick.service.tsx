@@ -1,4 +1,4 @@
-import {CandlestickResponse} from "../../model/CandlestickResponse.model";
+import {CandlestickResponse} from "../../model/response/CandlestickResponse.model";
 import {IFetchDataService} from "./IFetchData.service";
 import DataFetcherParams from "./DataFetcherParams";
 

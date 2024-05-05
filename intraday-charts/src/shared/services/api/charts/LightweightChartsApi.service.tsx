@@ -3,6 +3,8 @@ import {Chart} from "../../../model/Chart.model";
 import {createChart, IChartApi, UTCTimestamp} from "lightweight-charts";
 import {IndicatorType} from "../../../model/IndicatorType.enum";
 import {Candle} from "../../../model/Candle.model";
+import {DataPoint} from "../../../model/response/DataPoint.model";
+import {MacdResponse} from "../../../model/response/MacdResponse.model";
 
 export class LightweightChartsApiService implements IChartAPIAdapter{
 
@@ -14,7 +16,6 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
 
     execute = (chartBox:HTMLElement|null, chart:Chart) => {
         if(!!chartBox && chart && chart.indicator && chart.indicator.data){
-            console.debug(`LightweightChartsApiService with data ${chart.indicator.data}`);
             let chartApi = createChart(chartBox,
                 {
                     ...this.options,
@@ -45,14 +46,35 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
         return [];
     }
 
-    setupSeries = (chartApi: IChartApi, type: IndicatorType, data: any[]) => {
-        switch (type){
+    setupLinesData = (data: DataPoint[]) =>{
+        if(data){
+            return data.map( (d: DataPoint) => {
+               return {
+                   ...d,
+                   time: d.timestampInUTCSeconds as UTCTimestamp,
+               }
+            });
+        }
+        return [];
+    }
+
+    setupSeries = (chartApi: IChartApi, type: IndicatorType, data: unknown) => {
+        switch (type) {
             case IndicatorType.Candlestick: {
                 const series = chartApi.addCandlestickSeries();
-                series.setData(this.setupCandlestickData(data));
+                series.setData(this.setupCandlestickData(data as Candle[]));
                 break;
             }
-            case IndicatorType.MACD:
+            case IndicatorType.MACD: {
+                const macdSeries = chartApi.addLineSeries({color: 'white'});
+                const signalSeries = chartApi.addLineSeries({color: 'yellow'});
+                const macdResponse = data as MacdResponse;
+                if(macdResponse){
+                    macdSeries.setData(this.setupLinesData(macdResponse.macd));
+                    signalSeries.setData(this.setupLinesData(macdResponse.signal));
+                }
+                break;
+            }
             case IndicatorType.RSI:
                 console.debug("Work to be done...");
                 break;

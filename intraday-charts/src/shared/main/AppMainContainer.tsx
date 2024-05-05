@@ -7,7 +7,6 @@ import {AppContext} from "../context/AppContext";
 import {DataFetcherService} from "../services/data/DataFetcher.service";
 import {Charts, IChartListFactory} from "../services/IChartListFactory.service";
 import {IndicatorData} from "../model/IndicatorData.model";
-import {ConfigContext} from "../context/ConfigContext";
 
 export const AppMainContainer:React.FC< {
     readonly chartListFactoryService: IChartListFactory,
@@ -16,7 +15,6 @@ export const AppMainContainer:React.FC< {
     const {indicatorState} = useContext(IndicatorContext);
     const {notificationDispatch} = useContext(NotificationContext);
     const {appState} = useContext(AppContext);
-    const {configState} = useContext(ConfigContext);
     const [charts, setCharts] = useState({} as Charts);
     const [indicatorDataMap, indicatorDataMapDispatch] = useReducer(
         (state: {map: Map<IndicatorType,IndicatorData>}, indicatorData: IndicatorData) => {
@@ -30,7 +28,7 @@ export const AppMainContainer:React.FC< {
 
     const renderCharts = () => {
         console.debug(`Main chart id ${charts?.mainChart?.id}`)
-        setCharts(chartListFactoryService.getChartList(Array.from(indicatorDataMap.map.values()), appState.selectedTicker));
+        setCharts( chartListFactoryService.getChartList(Array.from(indicatorDataMap.map.values()), appState.selectedTicker));
     };
 
     const windowResizeListener = useCallback(() => {
@@ -78,8 +76,7 @@ export const AppMainContainer:React.FC< {
                         exchange: appState.selectedStockExchange,
                         dateEnd: appState.endDate,
                         dateBegin: appState.startDate
-                    },
-                    configState.configs
+                    }
                 ));
         });
         renderCharts();
