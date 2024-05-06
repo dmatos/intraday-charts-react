@@ -7,6 +7,7 @@ import TimeframeInput, {TimeframeProps} from "./number/TimeframeInput";
 import {IButtonCallbackFn} from "./button/IButtonCallbackFn";
 import InsertIndicatorButton from "./button/InsertIndicatorButton";
 import {IAddIndicatorCallbackFn} from "./button/IAddIndicatorCallbackFn";
+import ConfigsButton from "./button/ConfigsButton";
 
 export interface AppHeaderProps{
     stockExchangeInput: AutocompleteInputData,
@@ -48,8 +49,11 @@ const AppHeader = (props: AppHeaderProps) => {
             <Box display="grid" justifySelf={"start"} bgcolor={theme.palette.background.paper}>
                 <DateInput {...props.endDateCallbackFn}/>
             </Box>
-            <Box display="grid"justifySelf={"end"}   bgcolor={theme.palette.background.default}>
+            <Box display="grid" justifySelf={"end"}   bgcolor={theme.palette.background.default}>
                 <InsertIndicatorButton {...props.insertIndicator}/>
+            </Box>
+            <Box display="grid" justifySelf={"end"}   bgcolor={theme.palette.background.default}>
+                <ConfigsButton/>
             </Box>
             <Box display="grid" justifySelf={"end"} bgcolor={theme.palette.background.default}>
                 <RenderChartsButton {...props.renderChartsCallbackFn}/>
