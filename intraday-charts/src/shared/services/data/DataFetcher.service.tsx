@@ -3,6 +3,7 @@ import {CandlestickService} from "./Candlestick.service";
 import DataFetcherParams from "./DataFetcherParams";
 import {MACDFetcherService} from "./MACDFetcher.service";
 import {RSIFetcherService} from "./RSIFetcher.service";
+import {EMAFetcherService} from "./EMAFetcher.service";
 
 export class DataFetcherService{
     async execute(indicatorType: IndicatorType, params: DataFetcherParams){
@@ -14,6 +15,8 @@ export class DataFetcherService{
                 return new MACDFetcherService().fetchData(params);
             case IndicatorType.RSI:
                 return new RSIFetcherService().fetchData(params);
+            case IndicatorType.EMA:
+                return new EMAFetcherService().fetchData(params);
             default:
                 return async () => {
                     console.debug("No data fetcher available");

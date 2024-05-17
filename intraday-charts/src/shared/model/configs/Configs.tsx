@@ -1,4 +1,4 @@
-import {MACDConfigKeys, RSIConfigKeys} from "./ConfigKeys.model";
+import {EMAConfigKeys, MACDConfigKeys, RSIConfigKeys} from "./ConfigKeys.model";
 import {IndicatorType} from "../IndicatorType.enum";
 
 
@@ -36,12 +36,28 @@ Configs.set(MACDConfigKeys[MACDConfigKeys.SignalKey], {
     max: 100
 })
 
-Configs.set(MACDConfigKeys[MACDConfigKeys.SignalDelay], {
-    key: MACDConfigKeys[MACDConfigKeys.SignalDelay],
+Configs.set(MACDConfigKeys[MACDConfigKeys.SignalDelayKey], {
+    key: MACDConfigKeys[MACDConfigKeys.SignalDelayKey],
     description: "MACD signal delay",
     value: 3,
     min: 0,
     max: 10
+})
+
+Configs.set(EMAConfigKeys[EMAConfigKeys.SignalDelayKey], {
+    key: EMAConfigKeys[EMAConfigKeys.SignalDelayKey],
+    description: "EMA signal delay",
+    value: 5,
+    min: 0,
+    max: 10
+})
+
+Configs.set(EMAConfigKeys[EMAConfigKeys.SignalKey], {
+    key: EMAConfigKeys[EMAConfigKeys.SignalKey],
+    description: "EMA signal line",
+    value: 10,
+    min: 1,
+    max: 100
 })
 
 Configs.set(RSIConfigKeys[RSIConfigKeys.NumberOfCandles], {
@@ -59,17 +75,26 @@ export function getConfigsByIndicator(indicatorType: IndicatorType){
                 Configs.get(MACDConfigKeys[MACDConfigKeys.FastSignalKey]),
                 Configs.get(MACDConfigKeys[MACDConfigKeys.SlowSignalKey]),
                 Configs.get(MACDConfigKeys[MACDConfigKeys.SignalKey]),
-                Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelay])
+                Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelayKey])
             ]
         case IndicatorType.RSI:
             return [Configs.get(RSIConfigKeys[RSIConfigKeys.NumberOfCandles])]
+        case IndicatorType.EMA:
+            return [
+                Configs.get(EMAConfigKeys[EMAConfigKeys.SignalKey]),
+                Configs.get(EMAConfigKeys[EMAConfigKeys.SignalDelayKey])
+            ]
         default:
             return [];
     }
 }
 
 export function getConfigurableIndicators(): IndicatorType[]{
-    return Array.of(IndicatorType.MACD, IndicatorType.RSI);
+    return [
+        IndicatorType.MACD,
+        IndicatorType.RSI,
+        IndicatorType.EMA
+    ];
 }
 
 export default Configs;

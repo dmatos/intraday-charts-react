@@ -1,10 +1,10 @@
 import DataFetcherParams from "./DataFetcherParams";
-import {IFetchDataService} from "./IFetchData.service";
 import Configs from "../../model/configs/Configs";
-import {MacdResponse} from "../../model/response/MacdResponse.model";
-import {MACDConfigKeys} from "../../model/configs/ConfigKeys.model";
+import {EMAConfigKeys} from "../../model/configs/ConfigKeys.model";
+import {IFetchDataService} from "./IFetchData.service";
+import {MovingAverageResponse} from "../../model/response/MovingAverageResponse.model";
 
-export class MACDFetcherService implements IFetchDataService {
+export class EMAFetcherService implements IFetchDataService {
     fetchData = async (params: DataFetcherParams) => {
         return new Promise((resolve, reject) => {
             const requestOptions = {
@@ -15,17 +15,15 @@ export class MACDFetcherService implements IFetchDataService {
                     end: params.dateEnd,
                     chronoUnit: "MINUTES",
                     timeframe: params.timeframe,
-                    fastSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.FastSignalKey])?.value,
-                    slowSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.SlowSignalKey])?.value,
-                    signal: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalKey])?.value,
-                    signalDelay: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelayKey])?.value
+                    signal: Configs.get(EMAConfigKeys[EMAConfigKeys.SignalKey])?.value,
+                    signalDelay: Configs.get(EMAConfigKeys[EMAConfigKeys.SignalDelayKey])?.value
                 }),
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 })
             };
-            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/ma/macd/${params.exchange}`, requestOptions)
+            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/ma/ema/${params.exchange}`, requestOptions)
                 .then( (response) => {
                     if(response.status >= 400){
                         reject(response);
@@ -34,7 +32,7 @@ export class MACDFetcherService implements IFetchDataService {
                         return response.json();
                     }
                 })
-                .then((data: MacdResponse|null) => {
+                .then((data: MovingAverageResponse|null) => {
                     resolve(data);
                 })
                 .catch(

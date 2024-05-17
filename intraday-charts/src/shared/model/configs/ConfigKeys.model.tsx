@@ -3,9 +3,14 @@ export enum MACDConfigKeys {
     FastSignalKey,
     SlowSignalKey,
     SignalKey,
-    SignalDelay
+    SignalDelayKey
 }
 
 export enum RSIConfigKeys{
     NumberOfCandles
+}
+
+export enum EMAConfigKeys{
+    SignalKey,
+    SignalDelayKey
 }

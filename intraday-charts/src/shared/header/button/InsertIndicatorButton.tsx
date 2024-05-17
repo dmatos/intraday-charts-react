@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import AutocompleteInput from "../autocomplete/AutocompleteInput";
 import {IndicatorType} from "../../model/IndicatorType.enum";
 import {IAddIndicatorCallbackFn} from "./IAddIndicatorCallbackFn";
+import {getConfigurableIndicators} from "../../model/configs/Configs";
 
 
 function InsertIndicatorButton(addIndicatorCallback: Readonly<IAddIndicatorCallbackFn>) {
@@ -11,7 +12,7 @@ function InsertIndicatorButton(addIndicatorCallback: Readonly<IAddIndicatorCallb
     const [open, setOpen] = useState(false);
     const [selectedIndicator, setSelectedIndicator] = useState("");
 
-    const options = [IndicatorType[IndicatorType.MACD], IndicatorType[IndicatorType.RSI]];
+    const options = getConfigurableIndicators().map(indicator => {return IndicatorType[indicator]});
 
     function openDialog (){
         setOpen(true);

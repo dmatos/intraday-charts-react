@@ -4,5 +4,5 @@ export enum IndicatorType{
     RSI,
     Volume,
     BollingerBands,
-    MME
+    EMA
 }

@@ -77,7 +77,7 @@ export class ChartListFactoryService implements IChartListFactory{
             [
                 IndicatorType.Candlestick,
                 IndicatorType.BollingerBands,
-                IndicatorType.MME
+                IndicatorType.EMA
             ];
 
         return mainCompliantArray.includes(type);

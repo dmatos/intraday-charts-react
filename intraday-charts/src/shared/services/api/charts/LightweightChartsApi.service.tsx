@@ -6,6 +6,7 @@ import {Candle} from "../../../model/Candle.model";
 import {DataPoint} from "../../../model/response/DataPoint.model";
 import {MacdResponse} from "../../../model/response/MacdResponse.model";
 import {RSIResponse} from "../../../model/response/RSIResponse.model";
+import {MovingAverageResponse} from "../../../model/response/MovingAverageResponse.model";
 
 export class LightweightChartsApiService implements IChartAPIAdapter{
 
@@ -111,8 +112,8 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
     setupMACD = (chartApi: IChartApi, macdResponse: MacdResponse) => {
         if(macdResponse){
             const macdHistogram = chartApi.addHistogramSeries({color: 'white'});
-            const macdSeries = chartApi.addLineSeries({color: 'green'});
-            const signalSeries = chartApi.addLineSeries({color: 'yellow'});
+            const macdSeries = chartApi.addLineSeries({color: 'green', lineWidth: 2});
+            const signalSeries = chartApi.addLineSeries({color: 'yellow', lineWidth: 2});
             macdSeries.setData(this.setupDataPointData(macdResponse.macd));
             signalSeries.setData(this.setupDataPointData(macdResponse.signal));
             macdHistogram.setData(this.setupDataPointData(macdResponse.histogram));
@@ -121,12 +122,19 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
 
     setupRSI = (chartApi: IChartApi, response: RSIResponse) => {
         if(response){
-            const rsiLine = chartApi.addLineSeries({color: "white"})
+            const rsiLine = chartApi.addLineSeries({color: "white", lineWidth: 2})
             rsiLine.setData(this.setupDataPointData(response.rsiValuesList));
         }
     }
 
-    setupCandlestickSeries = (chartApi: IChartApi, data: Candle[]) =>{
+    setupEMA = (chartApi: IChartApi, response: MovingAverageResponse) => {
+        if(response){
+            const emaLine = chartApi.addLineSeries({color: "white", lineWidth: 1})
+            emaLine.setData(this.setupDataPointData(response.movingAverages));
+        }
+    }
+
+    setupCandlestickSeries = (chartApi: IChartApi, data: Candle[]) => {
         this.mainChart = chartApi;
         const series = chartApi.addCandlestickSeries();
         series.setData(this.setupCandlestickData(data));
@@ -148,6 +156,9 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
             }
             case IndicatorType.RSI:
                 this.setupRSI(chartApi, data as RSIResponse);
+                break;
+            case IndicatorType.EMA:
+                this.setupEMA(chartApi, data as MovingAverageResponse);
                 break;
             default: {
                 console.debug("Work to be done...");
