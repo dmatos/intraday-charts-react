@@ -1,4 +1,4 @@
-import {MACDConfigKeys} from "./MacdConfigs.model";
+import {MACDConfigKeys, RSIConfigKeys} from "./ConfigKeys.model";
 import {IndicatorType} from "../IndicatorType.enum";
 
 
@@ -16,32 +16,40 @@ Configs.set(MACDConfigKeys[MACDConfigKeys.FastSignalKey], {
     key: MACDConfigKeys[MACDConfigKeys.FastSignalKey],
     description: "MACD fast line",
     value: 4,
-    min: 4,
-    max: 30
+    min: 1,
+    max: 100
 })
 
 Configs.set(MACDConfigKeys[MACDConfigKeys.SlowSignalKey], {
     key: MACDConfigKeys[MACDConfigKeys.SlowSignalKey],
     description: "MACD slow line",
     value: 15,
-    min: 4,
-    max: 30
+    min: 1,
+    max: 100
 })
 
 Configs.set(MACDConfigKeys[MACDConfigKeys.SignalKey], {
     key: MACDConfigKeys[MACDConfigKeys.SignalKey],
     description: "MACD signal line",
     value: 5,
-    min: 4,
-    max: 30
+    min: 1,
+    max: 100
 })
 
 Configs.set(MACDConfigKeys[MACDConfigKeys.SignalDelay], {
     key: MACDConfigKeys[MACDConfigKeys.SignalDelay],
     description: "MACD signal delay",
     value: 3,
-    min: 2,
+    min: 0,
     max: 10
+})
+
+Configs.set(RSIConfigKeys[RSIConfigKeys.NumberOfCandles], {
+    key: RSIConfigKeys[RSIConfigKeys.NumberOfCandles],
+    description: "Number of candles as periodo",
+    value: 14,
+    min: 1,
+    max: 100
 })
 
 export function getConfigsByIndicator(indicatorType: IndicatorType){
@@ -54,9 +62,14 @@ export function getConfigsByIndicator(indicatorType: IndicatorType){
                 Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelay])
             ]
         case IndicatorType.RSI:
+            return [Configs.get(RSIConfigKeys[RSIConfigKeys.NumberOfCandles])]
         default:
             return [];
     }
+}
+
+export function getConfigurableIndicators(): IndicatorType[]{
+    return Array.of(IndicatorType.MACD, IndicatorType.RSI);
 }
 
 export default Configs;

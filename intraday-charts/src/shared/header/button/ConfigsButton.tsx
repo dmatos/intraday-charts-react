@@ -1,16 +1,14 @@
 import {Box, Button, Dialog} from "@mui/material";
 import {Settings} from "@mui/icons-material";
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import {IndicatorConfigPage} from "../../layouts/IndicatorConfigPage";
-import {getConfigsByIndicator} from "../../model/configs/Configs";
-import {IndicatorContext} from "../../context/IndicatorContext";
+import {getConfigsByIndicator, getConfigurableIndicators} from "../../model/configs/Configs";
 import {IndicatorType} from "../../model/IndicatorType.enum";
 
 function ConfigsButton(){
 
     const [open, setOpen] = useState(false);
-    const {indicatorState} = useContext(IndicatorContext);
-    const [selectedIndicator, setSelectedIndicator] = useState(IndicatorType.Candlestick);
+    const [selectedIndicator, setSelectedIndicator] = useState(IndicatorType.MACD);
 
     function openDialog (){
         setOpen(true);
@@ -45,9 +43,9 @@ function ConfigsButton(){
                      alignSelf={"center"}
                      justifySelf={"center"}
                      paddingBlock={"1em"}
-                     gridTemplateColumns={`repeat(${indicatorState.indicators.size}, ${12/indicatorState.indicators.size}fr)`}
+                     gridTemplateColumns={`repeat(${getConfigurableIndicators().length}, ${12/getConfigurableIndicators().length}fr)`}
                 >
-                    {Array.from(indicatorState.indicators).map((indicator)=>{
+                    {getConfigurableIndicators().map((indicator)=>{
                         return (
                             <Button
                                 key={indicator}

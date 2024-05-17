@@ -1,11 +1,11 @@
 import DataFetcherParams from "./DataFetcherParams";
 import {IFetchDataService} from "./IFetchData.service";
 import Configs from "../../model/configs/Configs";
-import {MacdResponse} from "../../model/response/MacdResponse.model";
-import {MACDConfigKeys} from "../../model/configs/ConfigKeys.model";
+import {RSIConfigKeys} from "../../model/configs/ConfigKeys.model";
+import {RSIResponse} from "../../model/response/RSIResponse.model";
 
-export class MACDFetcherService implements IFetchDataService {
-    fetchData = async (params: DataFetcherParams) => {
+export class RSIFetcherService implements IFetchDataService {
+    fetchData = async (params:DataFetcherParams) => {
         return new Promise((resolve, reject) => {
             const requestOptions = {
                 method: 'POST',
@@ -15,17 +15,14 @@ export class MACDFetcherService implements IFetchDataService {
                     end: params.dateEnd,
                     chronoUnit: "MINUTES",
                     timeframe: params.timeframe,
-                    fastSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.FastSignalKey])?.value,
-                    slowSignal: Configs.get(MACDConfigKeys[MACDConfigKeys.SlowSignalKey])?.value,
-                    signal: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalKey])?.value,
-                    signalDelay: Configs.get(MACDConfigKeys[MACDConfigKeys.SignalDelay])?.value
+                    numberOfCandles: Configs.get(RSIConfigKeys[RSIConfigKeys.NumberOfCandles])?.value,
                 }),
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 })
-            };
-            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/ma/macd/${params.exchange}`, requestOptions)
+            }
+            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/rsi/${params.exchange}`, requestOptions)
                 .then( (response) => {
                     if(response.status >= 400){
                         reject(response);
@@ -34,8 +31,10 @@ export class MACDFetcherService implements IFetchDataService {
                         return response.json();
                     }
                 })
-                .then((data: MacdResponse|null) => {
-                    resolve(data);
+                .then((data: RSIResponse|null) => {
+                    if(data){
+                        resolve(data);
+                    }
                 })
                 .catch(
                     (error) => {
@@ -43,6 +42,6 @@ export class MACDFetcherService implements IFetchDataService {
                         reject(error);
                     }
                 )
-        });
+        })
     }
 }

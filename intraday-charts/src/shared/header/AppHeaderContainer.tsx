@@ -122,7 +122,14 @@ export default function AppHeaderContainer(){
                     type: indicatorState.mainChartType,
                     data: []
                 }
-            })
+            });
+            indicatorDispatch({
+                type: pushIndicator,
+                payload: {
+                    type: IndicatorType.Volume,
+                    data: []
+                }
+            });
         }
     }
 

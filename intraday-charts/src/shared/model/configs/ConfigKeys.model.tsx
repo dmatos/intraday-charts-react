@@ -5,3 +5,7 @@ export enum MACDConfigKeys {
     SignalKey,
     SignalDelay
 }
+
+export enum RSIConfigKeys{
+    NumberOfCandles
+}

@@ -56,13 +56,13 @@ export class ChartListFactoryService implements IChartListFactory{
         let height: number;
         switch (type){
             case IndicatorType.Candlestick:
-                height =  window.innerHeight * 50 / 100;
+                height =  window.innerHeight * 35 / 100;
                 break;
             case IndicatorType.MACD:
             case IndicatorType.RSI:
-                height = window.innerHeight * 30 / 100;
+                height = window.innerHeight * 20 / 100;
                 break;
-            default: height = window.innerHeight * 25 / 100;
+            default: height = window.innerHeight * 10 / 100;
         }
         return {
             callbackFn: this.setupChart,
@@ -73,6 +73,13 @@ export class ChartListFactoryService implements IChartListFactory{
     }
 
     isMainComplaint = (type: IndicatorType) =>{
-        return type === IndicatorType.Candlestick;
+        const mainCompliantArray =
+            [
+                IndicatorType.Candlestick,
+                IndicatorType.BollingerBands,
+                IndicatorType.MME
+            ];
+
+        return mainCompliantArray.includes(type);
     }
 }

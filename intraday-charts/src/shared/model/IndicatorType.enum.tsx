@@ -1,5 +1,8 @@
 export enum IndicatorType{
     Candlestick,
     MACD,
-    RSI
+    RSI,
+    Volume,
+    BollingerBands,
+    MME
 }
