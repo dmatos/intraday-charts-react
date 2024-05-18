@@ -3,6 +3,6 @@ export enum IndicatorType{
     MACD,
     RSI,
     Volume,
-    BollingerBands,
+    Bands,
     EMA
 }

@@ -13,6 +13,7 @@ function InsertIndicatorButton(addIndicatorCallback: Readonly<IAddIndicatorCallb
     const [selectedIndicator, setSelectedIndicator] = useState("");
 
     const options = getConfigurableIndicators().map(indicator => {return IndicatorType[indicator]});
+    options.push(IndicatorType[IndicatorType.Bands]);
 
     function openDialog (){
         setOpen(true);

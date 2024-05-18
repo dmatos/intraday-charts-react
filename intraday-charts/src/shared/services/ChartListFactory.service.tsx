@@ -76,7 +76,7 @@ export class ChartListFactoryService implements IChartListFactory{
         const mainCompliantArray =
             [
                 IndicatorType.Candlestick,
-                IndicatorType.BollingerBands,
+                IndicatorType.Bands,
                 IndicatorType.EMA
             ];
 

@@ -7,6 +7,7 @@ import {DataPoint} from "../../../model/response/DataPoint.model";
 import {MacdResponse} from "../../../model/response/MacdResponse.model";
 import {RSIResponse} from "../../../model/response/RSIResponse.model";
 import {MovingAverageResponse} from "../../../model/response/MovingAverageResponse.model";
+import {BandsResponse} from "../../../model/response/BandsResponse.model";
 
 export class LightweightChartsApiService implements IChartAPIAdapter{
 
@@ -140,6 +141,29 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
         series.setData(this.setupCandlestickData(data));
     }
 
+    setupBandsSeries = (chartApi: IChartApi, response: BandsResponse) => {
+        if(response){
+            const upperBand2 = chartApi.addLineSeries({color: "white", lineWidth: 1})
+            const upperBand3 = chartApi.addLineSeries({color: "white", lineWidth: 1})
+            const lowerBand2 = chartApi.addLineSeries({color: "white", lineWidth: 1})
+            const lowerBand3 = chartApi.addLineSeries({color: "white", lineWidth: 1})
+
+            const setupData = (bandArray: number[]) =>{
+               return  response.means.map( (meanData, index) => {
+                        return {
+                            ...meanData,
+                            value: bandArray[index]
+                        }
+                    }
+                )
+            };
+            upperBand2.setData(this.setupDataPointData(setupData(response.secondUp)));
+            upperBand3.setData(this.setupDataPointData(setupData(response.thirdUp)));
+            lowerBand2.setData(this.setupDataPointData(setupData(response.secondDown)));
+            lowerBand3.setData(this.setupDataPointData(setupData(response.thirdDown)));
+        }
+    }
+
     setupSeries = (chartApi: IChartApi, type: IndicatorType, data: unknown) => {
         switch (type) {
             case IndicatorType.Candlestick: {
@@ -159,6 +183,9 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
                 break;
             case IndicatorType.EMA:
                 this.setupEMA(chartApi, data as MovingAverageResponse);
+                break;
+            case IndicatorType.Bands:
+                this.setupBandsSeries(chartApi, data as BandsResponse);
                 break;
             default: {
                 console.debug("Work to be done...");
