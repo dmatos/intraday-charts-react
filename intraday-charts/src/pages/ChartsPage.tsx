@@ -3,11 +3,10 @@ import AppHeaderContainer from "../shared/header/AppHeaderContainer";
 import {Box, useTheme} from "@mui/material";
 import React, {ReactNode} from "react";
 import {AppMainContainer} from "../shared/main/AppMainContainer";
-import {CandlestickService} from "../shared/services/Candlestick.service";
 import NotificationContainer from "../shared/main/NotificationContainer";
-import {
-    CandlestickResponseHandlerService
-} from "../shared/services/response/handler/CandlestickResponseHandler.service";
+import {DataFetcherService} from "../shared/services/data/DataFetcher.service";
+import {ChartListFactoryService} from "../shared/services/ChartListFactory.service";
+import {LightweightChartsApiService} from "../shared/services/api/charts/LightweightChartsApi.service";
 
 const PlaceholderComponent = () => {
     const theme = useTheme();
@@ -17,11 +16,26 @@ const PlaceholderComponent = () => {
     )
 }
 export const ChartsPage:React.FC<{children:ReactNode}> = ({children})=>{
+
+    const theme = useTheme();
+
+    const chartListFactoryService = new ChartListFactoryService(new LightweightChartsApiService(
+        {
+            layout: {
+                background: { color: theme.palette.background.default },
+                textColor: theme.palette.text.primary,
+            },
+            grid: {
+                vertLines: { color: theme.palette.background.paper },
+                horzLines: { color: theme.palette.background.paper},
+            }
+        }));
+
     return (
         <div>
             <LayouBaseChartsPage
-                header={AppHeaderContainer(new CandlestickService(), new CandlestickResponseHandlerService())}
-                main={AppMainContainer()}
+                header={AppHeaderContainer()}
+                main={AppMainContainer( {chartListFactoryService, dataFetcher: new DataFetcherService()})}
                 footer={PlaceholderComponent()}>
                 {children}
             </LayouBaseChartsPage>

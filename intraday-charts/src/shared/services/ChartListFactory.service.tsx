@@ -24,8 +24,11 @@ export class ChartListFactoryService implements IChartListFactory{
             mainChart.auxIndicators = [...mainChart.auxIndicators, ...mainIndicators.slice(1)];
         }
         listIndicators.forEach(
-            (item, index) =>
-                chartList.push(this.getChart(item, `${item.type}${index}`, ticker))
+            (item, index) => {
+                if(item.data){
+                    chartList.push(this.getChart(item, `${item.type}${index}`, ticker))
+                }
+            }
         );
         return {
             mainChart,
@@ -44,7 +47,6 @@ export class ChartListFactoryService implements IChartListFactory{
             id: id,
             indicator:indicator,
             auxIndicators: [] as IndicatorData[],
-            config: {configs: new Map<string, string[]>()},
             chartBoxProps: this.getChartBoxConfigs(id, indicator?.type),
             title: `${ticker} ${indicator?.type}`
         };
@@ -54,16 +56,13 @@ export class ChartListFactoryService implements IChartListFactory{
         let height: number;
         switch (type){
             case IndicatorType.Candlestick:
-                height =  window.innerHeight * 40 / 100;
-                break;
-            case IndicatorType.Histogram:
-                height =  window.innerHeight * 10 / 100;
+                height =  window.innerHeight * 35 / 100;
                 break;
             case IndicatorType.MACD:
             case IndicatorType.RSI:
-                height = window.innerHeight * 30 / 100;
+                height = window.innerHeight * 20 / 100;
                 break;
-            default: height = window.innerHeight * 25 / 100;
+            default: height = window.innerHeight * 10 / 100;
         }
         return {
             callbackFn: this.setupChart,
@@ -74,9 +73,13 @@ export class ChartListFactoryService implements IChartListFactory{
     }
 
     isMainComplaint = (type: IndicatorType) =>{
-        switch (type){
-            case(IndicatorType.Candlestick): return true;
-            default: return false;
-        }
+        const mainCompliantArray =
+            [
+                IndicatorType.Candlestick,
+                IndicatorType.Bands,
+                IndicatorType.EMA
+            ];
+
+        return mainCompliantArray.includes(type);
     }
 }

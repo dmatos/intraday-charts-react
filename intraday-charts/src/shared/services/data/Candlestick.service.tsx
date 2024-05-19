@@ -1,25 +1,26 @@
-import {CandlestickResponse} from "../model/CandlestickResponse.model";
+import {CandlestickResponse} from "../../model/response/CandlestickResponse.model";
 import {IFetchDataService} from "./IFetchData.service";
+import DataFetcherParams from "./DataFetcherParams";
 
 export class CandlestickService implements IFetchDataService{
 
-    fetchData = async (exchange: string, ticker: string, dateBegin: string, dateEnd: string, timeframe: number) => {
+    fetchData = async (params:DataFetcherParams) => {
         return new Promise((resolve, reject) => {
             const requestOptions = {
                 method: 'POST',
                 body: JSON.stringify({
-                    tickerCode: ticker,
-                    begin: dateBegin,
-                    end: dateEnd,
+                    tickerCode: params.ticker,
+                    begin: params.dateBegin,
+                    end: params.dateEnd,
                     chronoUnit: "MINUTES",
-                    timeframe: timeframe
+                    timeframe: params.timeframe
                 }),
                 headers: new Headers({
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 })
             }
-            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/candlestick/${exchange}`, requestOptions)
+            fetch(process.env.REACT_APP_INTRADAY_API_URL + `/intraday/metadata/candlestick/${params.exchange}`, requestOptions)
                 .then( (response) => {
                     if(response.status >= 400){
                         reject(response);
@@ -29,7 +30,7 @@ export class CandlestickService implements IFetchDataService{
                     }
                 })
                 .then((data: CandlestickResponse|null) => {
-                    if(!!data){
+                    if(data){
                         resolve(data.candles);
                     }
                 })

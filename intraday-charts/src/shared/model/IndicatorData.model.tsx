@@ -1,6 +1,6 @@
 import {IndicatorType} from "./IndicatorType.enum";
 
 export interface IndicatorData{
-    data: number[][],
+    data: [],
     type: IndicatorType
 }

@@ -1,21 +1,15 @@
-import {Button, Icon} from "@mui/material";
+import {Button} from "@mui/material";
+import {TrendingUp} from "@mui/icons-material";
+import {IButtonCallbackFn} from "./IButtonCallbackFn";
 
-export interface RenderChartsButtonData {
-    callBackFn: () => void
-}
-
-function RenderChartsButton(executeButtonData: Readonly<RenderChartsButtonData>){
+function RenderChartsButton(executeButtonData: Readonly<IButtonCallbackFn>){
     return (
         <Button
             variant="contained"
             color={"primary"}
-            onClick={executeButtonData.callBackFn}
+            onClick={executeButtonData.callbackFn}
         >
-            <link
-                rel="stylesheet"
-                href="https://fonts.googleapis.com/icon?family=Material+Icons"
-            />
-            <Icon>trending_up</Icon>
+            <TrendingUp/>
         </Button>
     )
 }
