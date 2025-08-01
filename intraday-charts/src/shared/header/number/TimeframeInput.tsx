@@ -18,7 +18,7 @@ const TimeframeInput = (timeframeProps: TimeframeProps) => {
     return <NumberInput
         aria-label="Timeframe"
         placeholder="Minutes"
-        min={1} max={99}
+        min={1}
         onChange = {changeTimeframe}
         slots={{
             root: StyledInputRoot,

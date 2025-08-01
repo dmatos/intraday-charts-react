@@ -14,3 +14,7 @@ export enum EMAConfigKeys{
     SignalKey,
     SignalDelayKey
 }
+
+export enum PIPConfigKeys{
+    NumOfPointsKey
+}

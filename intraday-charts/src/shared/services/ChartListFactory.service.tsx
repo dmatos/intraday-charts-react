@@ -56,11 +56,11 @@ export class ChartListFactoryService implements IChartListFactory{
         let height: number;
         switch (type){
             case IndicatorType.Candlestick:
-                height =  window.innerHeight * 35 / 100;
+                height =  window.innerHeight * 50 / 100;
                 break;
             case IndicatorType.MACD:
             case IndicatorType.RSI:
-                height = window.innerHeight * 20 / 100;
+                height = window.innerHeight * 15 / 100;
                 break;
             default: height = window.innerHeight * 10 / 100;
         }
@@ -77,7 +77,8 @@ export class ChartListFactoryService implements IChartListFactory{
             [
                 IndicatorType.Candlestick,
                 IndicatorType.Bands,
-                IndicatorType.EMA
+                IndicatorType.EMA,
+                IndicatorType.PIP
             ];
 
         return mainCompliantArray.includes(type);

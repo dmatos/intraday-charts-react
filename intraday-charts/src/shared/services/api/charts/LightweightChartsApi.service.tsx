@@ -3,11 +3,12 @@ import {Chart} from "../../../model/Chart.model";
 import {createChart, IChartApi, Range, UTCTimestamp} from "lightweight-charts";
 import {IndicatorType} from "../../../model/IndicatorType.enum";
 import {Candle} from "../../../model/Candle.model";
-import {DataPoint} from "../../../model/response/DataPoint.model";
+import {DataPoint} from "../../../model/DataPoint.model";
 import {MacdResponse} from "../../../model/response/MacdResponse.model";
 import {RSIResponse} from "../../../model/response/RSIResponse.model";
 import {MovingAverageResponse} from "../../../model/response/MovingAverageResponse.model";
 import {BandsResponse} from "../../../model/response/BandsResponse.model";
+import {PIPResponse} from "../../../model/response/PIPResponse.model";
 
 export class LightweightChartsApiService implements IChartAPIAdapter{
 
@@ -135,6 +136,13 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
         }
     }
 
+    setupPIP = (chartAPI: IChartApi, response: PIPResponse) => {
+        if(response){
+            const pipLine = chartAPI.addLineSeries({color:"yellow", lineWidth: 1});
+            pipLine.setData(this.setupDataPointData(response.pipList));
+        }
+    }
+
     setupCandlestickSeries = (chartApi: IChartApi, data: Candle[]) => {
         this.mainChart = chartApi;
         const series = chartApi.addCandlestickSeries();
@@ -186,6 +194,9 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
                 break;
             case IndicatorType.Bands:
                 this.setupBandsSeries(chartApi, data as BandsResponse);
+                break;
+            case IndicatorType.PIP:
+                this.setupPIP(chartApi, data as PIPResponse);
                 break;
             default: {
                 console.debug("Work to be done...");

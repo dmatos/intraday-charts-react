@@ -1,4 +1,4 @@
-import {EMAConfigKeys, MACDConfigKeys, RSIConfigKeys} from "./ConfigKeys.model";
+import {EMAConfigKeys, MACDConfigKeys, PIPConfigKeys, RSIConfigKeys} from "./ConfigKeys.model";
 import {IndicatorType} from "../IndicatorType.enum";
 
 
@@ -68,6 +68,14 @@ Configs.set(RSIConfigKeys[RSIConfigKeys.NumberOfCandles], {
     max: 100
 })
 
+Configs.set(PIPConfigKeys[PIPConfigKeys.NumOfPointsKey], {
+    key: PIPConfigKeys[PIPConfigKeys.NumOfPointsKey],
+    description: "Number of Perceptually Important Points",
+    value: 10,
+    min: 1,
+    max: 100
+})
+
 export function getConfigsByIndicator(indicatorType: IndicatorType){
     switch (indicatorType) {
         case IndicatorType.MACD:
@@ -84,6 +92,10 @@ export function getConfigsByIndicator(indicatorType: IndicatorType){
                 Configs.get(EMAConfigKeys[EMAConfigKeys.SignalKey]),
                 Configs.get(EMAConfigKeys[EMAConfigKeys.SignalDelayKey])
             ]
+        case IndicatorType.PIP:
+            return [
+                Configs.get(PIPConfigKeys[PIPConfigKeys.NumOfPointsKey])
+            ]
         default:
             return [];
     }
@@ -93,7 +105,8 @@ export function getConfigurableIndicators(): IndicatorType[]{
     return [
         IndicatorType.MACD,
         IndicatorType.RSI,
-        IndicatorType.EMA
+        IndicatorType.EMA,
+        IndicatorType.PIP
     ];
 }
 
