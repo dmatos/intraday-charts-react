@@ -9,6 +9,7 @@ import {RSIResponse} from "../../../model/response/RSIResponse.model";
 import {MovingAverageResponse} from "../../../model/response/MovingAverageResponse.model";
 import {BandsResponse} from "../../../model/response/BandsResponse.model";
 import {PIPResponse} from "../../../model/response/PIPResponse.model";
+import {VWAPResponse} from "../../../model/response/VWAPResponse";
 
 export class LightweightChartsApiService implements IChartAPIAdapter{
 
@@ -136,6 +137,13 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
         }
     }
 
+    setupVWAP = (chartApi: IChartApi, response: VWAPResponse) => {
+        if(response){
+            const emaLine = chartApi.addLineSeries({color: "white", lineWidth: 1})
+            emaLine.setData(this.setupDataPointData(response.vwap));
+        }
+    }
+
     setupPIP = (chartAPI: IChartApi, response: PIPResponse) => {
         if(response){
             const pipLine = chartAPI.addLineSeries({color:"yellow", lineWidth: 1});
@@ -197,6 +205,9 @@ export class LightweightChartsApiService implements IChartAPIAdapter{
                 break;
             case IndicatorType.PIP:
                 this.setupPIP(chartApi, data as PIPResponse);
+                break;
+            case IndicatorType.VWAP:
+                this.setupVWAP(chartApi, data as VWAPResponse);
                 break;
             default: {
                 console.debug("Work to be done...");

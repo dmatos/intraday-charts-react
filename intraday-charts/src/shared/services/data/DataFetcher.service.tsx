@@ -6,6 +6,7 @@ import {RSIFetcherService} from "./RSIFetcher.service";
 import {EMAFetcherService} from "./EMAFetcher.service";
 import {BollingerBandsFetcherService} from "./BollingerBandsFetcher.service";
 import {PIPFetcherService} from "./PIPFetcher.service";
+import {VWAPFetcherService} from "./VWAPFetcher.service";
 
 export class DataFetcherService{
     async execute(indicatorType: IndicatorType, params: DataFetcherParams){
@@ -23,6 +24,8 @@ export class DataFetcherService{
                 return new BollingerBandsFetcherService().fetchData(params);
             case IndicatorType.PIP:
                 return new PIPFetcherService().fetchData(params);
+            case IndicatorType.VWAP:
+                return new VWAPFetcherService().fetchData(params);
             default:
                 return async () => {
                     console.debug("No data fetcher available");

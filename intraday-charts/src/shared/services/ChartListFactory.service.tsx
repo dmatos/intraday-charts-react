@@ -78,7 +78,8 @@ export class ChartListFactoryService implements IChartListFactory{
                 IndicatorType.Candlestick,
                 IndicatorType.Bands,
                 IndicatorType.EMA,
-                IndicatorType.PIP
+                IndicatorType.PIP,
+                IndicatorType.VWAP
             ];
 
         return mainCompliantArray.includes(type);

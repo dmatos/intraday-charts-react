@@ -14,6 +14,7 @@ function InsertIndicatorButton(addIndicatorCallback: Readonly<IAddIndicatorCallb
 
     const options = getConfigurableIndicators().map(indicator => {return IndicatorType[indicator]});
     options.push(IndicatorType[IndicatorType.Bands]);
+    options.push(IndicatorType[IndicatorType.VWAP]);
 
     function openDialog (){
         setOpen(true);

@@ -5,5 +5,6 @@ export enum IndicatorType{
     Volume,
     Bands,
     EMA,
-    PIP
+    PIP,
+    VWAP
 }
